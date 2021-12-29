@@ -17,7 +17,7 @@ class InstagramAuthenticationWebViewActivity: AppCompatActivity() {
     companion object {
         private const val CLIENT_ID = ""
         private const val SECRET_ID = ""
-        private const val REDIRECT_URI = "https://wendyyanto.github.io/load"
+        private const val REDIRECT_URI = ""
     }
 
     private lateinit var webview: WebView
@@ -33,13 +33,27 @@ class InstagramAuthenticationWebViewActivity: AppCompatActivity() {
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 Log.v("WEND_IG", url.toString())
+                val safeUrl = url.toString()
+                if (safeUrl.startsWith(REDIRECT_URI)) {
+                    saveToken(safeUrl)
+                    return true
+                }
                 return super.shouldOverrideUrlLoading(view, url)
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                Log.v("WEND_IG", request?.url.toString())
+                val safeUrl = request?.url.toString()
+                if (safeUrl.startsWith(REDIRECT_URI)) {
+                    saveToken(safeUrl)
+                    return true
+                }
+
                 return super.shouldOverrideUrlLoading(view, request)
             }
         }
+    }
+
+    private fun saveToken(redirectUrl: String) {
+
     }
 }
