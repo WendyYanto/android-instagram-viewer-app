@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "dev.wendyyanto.instagramviewertes"
+        applicationId "dev.wendyyanto.instagramviewerapp"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
