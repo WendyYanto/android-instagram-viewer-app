@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <applicationt
+    <application
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,6 +24,6 @@
         <activity android:name=".instagrampermission.InstagramAuthenticationWebViewActivity" />
 
         <activity android:name=".gallery.GalleryActivity" />
-    </applicationt>
+    </application>
 
 </manifest>
