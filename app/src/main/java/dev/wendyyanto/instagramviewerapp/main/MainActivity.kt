@@ -1,9 +1,11 @@
-package dev.wendyyanto.instagramviewerapp
+package dev.wendyyanto.instagramviewerapp.main
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import dev.wendyyanto.instagramviewerapp.R
+import dev.wendyyanto.instagramviewerapp.instagrampermission.InstagramAuthenticationWebViewActivity
 
 class MainActivity : AppCompatActivity() {
 

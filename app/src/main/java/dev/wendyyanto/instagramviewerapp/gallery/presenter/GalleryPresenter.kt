@@ -7,5 +7,5 @@ package dev.wendyyanto.instagramviewerapp.gallery.presenter
 
 interface GalleryPresenter {
 
-    fun getImages()
+    fun getImages(accessToken: String)
 }

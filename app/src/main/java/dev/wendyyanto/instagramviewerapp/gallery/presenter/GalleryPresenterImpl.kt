@@ -8,6 +8,7 @@ import dev.wendyyanto.instagramviewerapp.data.remote.InstagramAPIService
 import dev.wendyyanto.instagramviewerapp.data.remote.InstagramGraphService
 import dev.wendyyanto.instagramviewerapp.gallery.GalleryView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.Response
 
@@ -23,28 +24,49 @@ class GalleryPresenterImpl constructor(
 ) :
     GalleryPresenter {
 
-    override fun getImages() {
-        instagramAPIService.getAccessToken(
+    override fun getImages(accessToken: String) {
+        getAndSaveTokensIfNotExists(accessToken)
+            .flatMap { token -> getImageMedias(token) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { response -> saveImages(response) }
+    }
+
+    private fun getImageMedias(accessToken: String): Observable<Response<MediaResponse>> {
+        return instagramGraphService.getMedias(
+            accessToken,
+            "id,caption,media_type,media_url"
+        )
+    }
+
+    private fun getAndSaveTokensIfNotExists(accessToken: String): Observable<String> {
+        if (accessToken.isNotBlank()) {
+            return Observable.fromCallable { accessToken }
+        }
+
+        return getShortLivedAccessToken()
+            .map(::saveAccessTokenAndUserId)
+            .flatMap { getLongLivedAccessToken() }
+            .map { it.body()?.accessToken.orEmpty() }
+            .doOnNext { token -> galleryView.saveAccessToken(token) }
+    }
+
+    private fun getShortLivedAccessToken(): Observable<Response<AccessTokenResponse>> {
+        return instagramAPIService.getShortLivedAccessToken(
             clientId = BuildConfig.INSTAGRAM_CLIENT_ID,
             clientSecret = BuildConfig.INSTAGRAM_SECRET_ID,
             code = LocalDataSource.getAuthenticationToken(),
             grantType = "authorization_code",
             redirectUri = BuildConfig.INSTAGRAM_REDIRECT_URI
         )
-            .map(::saveAccessTokenAndUserId)
-            .flatMap {
-                instagramGraphService.getMedias(
-                    LocalDataSource.getAccessToken(),
-                    "id,caption,media_type,media_url"
-                )
-            }
-            .doOnNext { println(it) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { response ->
-                saveImages(response)
-            }
+    }
 
+    private fun getLongLivedAccessToken(): Observable<Response<AccessTokenResponse>> {
+        return instagramGraphService.getLongLivedAccessToken(
+            accessToken = LocalDataSource.getAccessToken(),
+            clientSecret = BuildConfig.INSTAGRAM_SECRET_ID,
+            grantType = "ig_exchange_token"
+        )
     }
 
     private fun saveAccessTokenAndUserId(response: Response<AccessTokenResponse>) {

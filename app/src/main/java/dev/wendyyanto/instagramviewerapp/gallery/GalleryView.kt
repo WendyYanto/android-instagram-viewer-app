@@ -8,4 +8,6 @@ package dev.wendyyanto.instagramviewerapp.gallery
 interface GalleryView {
 
     fun setImages(images: List<String>)
+
+    fun saveAccessToken(accessToken: String)
 }

@@ -1,7 +1,7 @@
 package dev.wendyyanto.instagramviewerapp.gallery
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +26,11 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-        galleryPresenter.getImages()
+        val accessToken = getSharedPreferences("instagram", Context.MODE_PRIVATE)
+            .getString("ACCESS_TOKEN", "")
+            .orEmpty()
+
+        galleryPresenter.getImages(accessToken)
     }
 
     override fun setImages(images: List<String>) {
@@ -37,4 +41,12 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
             layoutManager = GridLayoutManager(context, 3)
         }
     }
+
+    override fun saveAccessToken(accessToken: String) {
+        getSharedPreferences("instagram", Context.MODE_PRIVATE).edit()
+            .putString("ACCESS_TOKEN", accessToken)
+            .apply()
+    }
+
+
 }

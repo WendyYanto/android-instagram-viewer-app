@@ -1,4 +1,4 @@
-package dev.wendyyanto.instagramviewerapp
+package dev.wendyyanto.instagramviewerapp.instagrampermission
 
 import android.content.Intent
 import android.net.Uri
@@ -8,6 +8,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import dev.wendyyanto.instagramviewerapp.BuildConfig
+import dev.wendyyanto.instagramviewerapp.R
 import dev.wendyyanto.instagramviewerapp.data.local.LocalDataSource
 import dev.wendyyanto.instagramviewerapp.gallery.GalleryActivity
 

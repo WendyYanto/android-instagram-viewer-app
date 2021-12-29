@@ -16,7 +16,7 @@ interface InstagramAPIService {
 
     @POST("/oauth/access_token")
     @FormUrlEncoded
-    fun getAccessToken(
+    fun getShortLivedAccessToken(
         @Field("client_id") clientId: String?,
         @Field("client_secret") clientSecret: String?,
         @Field("code") code: String?,

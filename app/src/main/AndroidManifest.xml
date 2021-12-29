@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InstagramViewerTes">
-        <activity android:name="dev.wendyyanto.instagramviewerapp.MainActivity">
+        <activity android:name="dev.wendyyanto.instagramviewerapp.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".InstagramAuthenticationWebViewActivity" />
+        <activity android:name=".instagrampermission.InstagramAuthenticationWebViewActivity" />
 
         <activity android:name=".gallery.GalleryActivity" />
     </application>
