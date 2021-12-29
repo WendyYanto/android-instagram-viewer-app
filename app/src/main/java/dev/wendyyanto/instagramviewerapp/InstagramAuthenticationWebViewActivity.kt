@@ -1,11 +1,15 @@
 package dev.wendyyanto.instagramviewerapp
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import dev.wendyyanto.instagramviewerapp.data.local.LocalDataSource
+import dev.wendyyanto.instagramviewerapp.gallery.GalleryActivity
 
 
 /**
@@ -32,12 +36,13 @@ class InstagramAuthenticationWebViewActivity: AppCompatActivity() {
         webview.settings.javaScriptEnabled = true
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                Log.v("WEND_IG", url.toString())
                 val safeUrl = url.toString()
                 if (safeUrl.startsWith(REDIRECT_URI)) {
                     saveToken(safeUrl)
+                    goToGallery()
                     return true
                 }
+
                 return super.shouldOverrideUrlLoading(view, url)
             }
 
@@ -45,6 +50,7 @@ class InstagramAuthenticationWebViewActivity: AppCompatActivity() {
                 val safeUrl = request?.url.toString()
                 if (safeUrl.startsWith(REDIRECT_URI)) {
                     saveToken(safeUrl)
+                    goToGallery()
                     return true
                 }
 
@@ -54,6 +60,28 @@ class InstagramAuthenticationWebViewActivity: AppCompatActivity() {
     }
 
     private fun saveToken(redirectUrl: String) {
+        if (hasError(redirectUrl)) {
+            return
+        }
 
+        val authenticationCode = getAuthenticationCode(redirectUrl)
+        Log.v("WEND_I", authenticationCode)
+        LocalDataSource.setAuthenticationToken(authenticationCode)
+    }
+
+    private fun hasError(redirectUrl: String): Boolean {
+        return false
+    }
+
+    private fun getAuthenticationCode(redirectUrl: String): String {
+        val uri = Uri.parse(redirectUrl)
+        val code = uri.getQueryParameter("code")
+        return code?.split("_#")?.firstOrNull().orEmpty()
+    }
+
+    private fun goToGallery() {
+        val intent = Intent(this, GalleryActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
