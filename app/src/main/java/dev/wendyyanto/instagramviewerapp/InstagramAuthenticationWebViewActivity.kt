@@ -15,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 class InstagramAuthenticationWebViewActivity: AppCompatActivity() {
 
     companion object {
-        private const val CLIENT_ID = ""
-        private const val SECRET_ID = ""
-        private const val REDIRECT_URI = ""
+        private const val CLIENT_ID = BuildConfig.INSTAGRAM_CLIENT_ID
+        private const val SECRET_ID = BuildConfig.INSTAGRAM_SECRET_ID
+        private const val REDIRECT_URI = BuildConfig.INSTAGRAM_REDIRECT_URI
     }
 
     private lateinit var webview: WebView
